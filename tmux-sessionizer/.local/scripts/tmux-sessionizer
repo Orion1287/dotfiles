@@ -1,71 +1,48 @@
 #!/usr/bin/env bash
-
-open_browser() {
-  local dir="${1:-.}"
-
-  while true; do
-    # Visible directories
-    dir_entries_visible=$(find "$dir" -maxdepth 1 -mindepth 1 -type d ! -name '.*' ! -name '.' | while read -r d; do
-      name=$(basename "$d")
-      printf "\033[1;34m%s/\033[0m\n" "$name"
-    done | sort -f)
-
-    # Hidden directories
-    dir_entries_hidden=$(find "$dir" -maxdepth 1 -mindepth 1 -type d -name '.*' ! -name '.' | while read -r d; do
-      name=$(basename "$d")
-      printf "\033[1;2;34m%s/\033[0m\n" "$name"  # dim blue for hidden dirs
-    done | sort -f)
-
-    # Visible files
-    file_entries_visible=$(find "$dir" -maxdepth 1 -mindepth 1 -type f ! -name '.*' | while read -r f; do
-      name=$(basename "$f")
-      if [[ -x "$f" ]]; then
-        printf "\033[1;32m%s*\033[0m\n" "$name"
-      else
-        printf "%s\n" "$name"
-      fi
-    done | sort -f)
-
-    # Hidden files
-    file_entries_hidden=$(find "$dir" -maxdepth 1 -mindepth 1 -type f -name '.*' | while read -r f; do
-      name=$(basename "$f")
-      if [[ -x "$f" ]]; then
-        printf "\033[2;32m%s*\033[0m\n" "$name"  # dim green for hidden executables
-      else
-        printf "\033[2m%s\033[0m\n" "$name"       # dim for hidden
-      fi
-    done | sort -f)
-
-    entries=$(printf "\033[1;36m..\033[0m\n"; echo "$dir_entries_visible"; echo "$dir_entries_hidden"; echo "$file_entries_visible"; echo "$file_entries_hidden")
-
-    selected=$(echo -e "$entries" | FZF_DEFAULT_COMMAND='' fzf --ansi --no-sort --tac \
-      --preview='
-        target=$(echo {} | sed "s/[/*]$//; s/\x1B\[[0-9;]*m//g");
-        fullpath=$(realpath "'"$dir"'")/"$target"
-        if [ -d "$fullpath" ]; then
-          ls -l --color=always "$fullpath"
-        else
-          bat --style=numbers --color=always "$fullpath" 2>/dev/null || cat "$fullpath"
-        fi')
-
-    [[ -z "$selected" ]] && break
-
-    clean=$(echo "$selected" | sed -E 's/\x1B\[[0-9;]*m//g' | sed 's|[/\*]$||')
-    if [[ "$clean" == ".." ]]; then
-      dir=$(dirname "$dir")
-      continue
+switch_to() {
+    if [[ -z $TMUX ]]; then
+        tmux attach-session -t $1
+    else
+        tmux switch-client -t $1
     fi
-
-    fullpath="$dir/$clean"
-
-    if [[ -d "$fullpath" ]]; then
-      dir="$fullpath"
-    elif [[ -f "$fullpath" ]]; then
-      nvim "$fullpath"
-      break
-    fi
-  done
 }
 
-open_browser
+has_session() {
+    tmux list-sessions | grep -q "^$1:"
+}
 
+hydrate() {
+    if [ -f $2/.tmux-sessionizer ]; then
+        tmux send-keys -t $1 "source $2/.tmux-sessionizer" c-M
+    elif [ -f $HOME/.tmux-sessionizer ]; then
+        tmux send-keys -t $1 "source $HOME/.tmux-sessionizer" c-M
+    fi
+}
+
+if [[ $# -eq 1 ]]; then
+    selected=$1
+else
+    # If someone wants to make this extensible, i'll accept
+    # PR
+    selected=$(find ~/ ~/personal ~/personal/dev/env/.config -mindepth 1 -maxdepth 1 -type d | fzf)
+fi
+
+if [[ -z $selected ]]; then
+    exit 0
+fi
+
+selected_name=$(basename "$selected" | tr . _)
+tmux_running=$(pgrep tmux)
+
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+    tmux new-session -s $selected_name -c $selected
+    hydrate $selected_name $selected
+    exit 0
+fi
+
+if ! has_session $selected_name; then
+    tmux new-session -ds $selected_name -c $selected
+    hydrate $selected_name $selected
+fi
+
+switch_to $selected_name
