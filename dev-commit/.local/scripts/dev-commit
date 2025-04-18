@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+pushd ~/pandoras-box
+git add .
+git commit -m "automated dev commit"
+git push origin main
+popd
+
+pushd ~/dotfiles
+git add .
+git commit -m "Automated dev commit"
+git push origin main
+popd
