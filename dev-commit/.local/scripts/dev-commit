@@ -11,3 +11,10 @@ git add .
 git commit -m "Automated dev commit"
 git push origin main
 popd
+
+pushd ~/Games/planet-game
+git add .
+git commit -m "Automated dev commit"
+git push origin main
+popd
+
