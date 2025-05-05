@@ -20,4 +20,4 @@ git push origin main
 popd
 }
 
-dev_commit
+dev_commit > /dev/null
