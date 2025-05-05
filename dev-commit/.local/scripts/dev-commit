@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+dev_commit() {
 pushd ~/pandoras-box
 git add .
 git commit -m "automated dev commit"
@@ -17,4 +18,6 @@ git add .
 git commit -m "Automated dev commit"
 git push origin main
 popd
+}
 
+dev_commit
