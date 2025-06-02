@@ -35,7 +35,7 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 alias ls='ls --color'
 alias vim='nvim'
 alias c='clear'
-
+alias battery='cat /sys/class/power_supply/BAT1/capacity'
 # pnpm
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"

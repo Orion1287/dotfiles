@@ -14,7 +14,7 @@ require("overlord.lazy_init")
 -- DO.not
 
 local augroup = vim.api.nvim_create_augroup
-local ThePrimeagenGroup = augroup('overlord', {})
+local overlord  = augroup('overlord', {})
 
 local autocmd = vim.api.nvim_create_autocmd
 local yank_group = augroup('HighlightYank', {})

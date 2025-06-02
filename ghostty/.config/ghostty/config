@@ -1,6 +1,8 @@
 ############COLORS#####################
 theme = rose-pine
 background = 000000
+background-opacity = 0.55
+background-blur = true
 #########################################3
 font-family = JetBrainsMono Nerd Font
 font-size = 12
@@ -10,4 +12,4 @@ gtk-titlebar = false
 # what is a prefix?
 # keybind = ctrl+d=scroll_page_fractional:0.5
 # keybind = ctrl+u=scroll_page_fractional:-0.5
-cursor-style = block 
+cursor-style = block
