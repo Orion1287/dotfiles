@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 dev_commit() {
-pushd ~/pandora-s-Box
+pushd ~/pandora-s-box
 git add .
 git commit -m "automated dev commit"
 git push origin main
