@@ -2,7 +2,7 @@ import AstalHyprland from "gi://AstalHyprland";
 import { App, Astal, Gtk, Gdk } from "astal/gtk4"
 import { Variable } from "astal"
 import Workspaces from "./Workspaces.tsx"
-
+import Music from "./Mpris";
 const time = Variable("").poll(1000, "date '+%H:%M - %A %e'")
 const hyprland = AstalHyprland.get_default();
 
@@ -25,6 +25,12 @@ export default function Bar(gdkMonitor: Gdk.Monitor) {
 
                 {/* Expanding spacer */}
                 <box hexpand />
+                <menubutton halign={Gtk.Align.END}>
+                <label label="" />
+                <popover>
+                    <Music />
+                </popover>
+                </menubutton>
 
                 {/* Time widget on the far right */}
                 <menubutton halign={Gtk.Align.END}>

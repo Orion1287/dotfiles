@@ -1,13 +1,41 @@
 // https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
+
 @use "./style/colors";
 @use "./style/workspaces";
+$rosewater: #f5e0dc;
+$flamingo: #f2cdcd;
+$pink: #f5c2e7;
+$mauve: #cba6f7;
+$red: #f38ba8;
+$maroon: #eba0ac;
+$peach: #fab387;
+$yellow: #f9e2af;
+$green: #a6e3a1;
+$teal: #94e2d5;
+$sky: #89dceb;
+$sapphire: #74c7ec;
+$blue: #89b4fa;
+$lavender: #b4befe;
+$text: #cdd6f4;
+$subtext1: #bac2de;
+$subtext0: #a6adc8;
+$overlay2: #9399b2;
+$overlay1: #7f849c;
+$overlay0: #6c7086;
+$surface2: #585b70;
+$surface1: #45475a;
+$surface0: #313244;
+$base: #1e1e2e;
+$mantle: #181825;
+$crust: #11111b;
+
 $fg-color: #{"@theme_fg_color"};
 $bg-color: #{"@theme_bg_color"};
 
 window.Bar {
     background: rgba(255, 255, 255, 0.1);
     color: $fg-color;
-    font-weight: bold;
+    font-family: "JetBrains Mono Nerd Font";
 
     >centerbox {
         background: $bg-color;
@@ -19,5 +47,60 @@ window.Bar {
         border-radius: 8px;
         margin: 2px;
     }
+}
+
+.MprisBox {
+  padding: 8px;
+  gap: 8px;
+}
+
+.cover_art {
+  width: 10%;
+  height: 100;
+  max-width: 15px;
+  aspect-ratio: 1;
+  border-radius: 1px;
+}
+
+.Music {
+  min-width: 240px; // Fixed width
+  max-width: 240px;
+  justify-content: center;
+  align-items: center;
+
+  label {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+.material {
+  font-family: "JetBrains Mono Nerd Font"; // Or your preferred icon font
+  font-size: 20px;
+
+  // Visual clarity
+  color: white;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.8); // Helps icons pop on light backgrounds
+
+  // Blur background
+  background-color: rgba(0, 0, 0, 0.3); // semi-transparent dark bg
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); // for compatibility
+
+  // Styling
+  border: none;
+  border-radius: 12px;
+  padding: 8px 14px;
+  margin: 4px;
+
+  // Optional hover/focus
+  transition: background-color 0.2s ease;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+  &:active {
+    background-color: rgba(255, 255, 255, 0.25);
+  }
 }
 
